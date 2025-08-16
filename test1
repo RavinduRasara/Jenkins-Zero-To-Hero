@@ -1,0 +1,21 @@
+pipeline {
+  agent none
+  stages {
+    stage('Back-end') {
+      agent { label 'ec2b' }   // run this stage on EC2B
+      steps {
+        docker.image('maven:3.8.1-adoptopenjdk-11').inside {
+          sh 'mvn --version'
+        }
+      }
+    }
+    stage('Front-end') {
+      agent { label 'ec2c' }   // run this stage on EC2C
+      steps {
+        docker.image('node:16-alpine').inside {
+          sh 'node --version'
+        }
+      }
+    }
+  }
+}
